@@ -32,16 +32,24 @@ Open `http://localhost:3000`.
 
 ## Deploy to Vercel
 
-1. Push this folder to GitHub.
-2. Import the repository in Vercel.
-3. Keep default framework detection (`Next.js`).
-4. Deploy.
+This project is configured for Vercel via `vercel.json`.
 
-Or use the Vercel CLI:
+### Option A: Git-based deployment (recommended)
+
+1. Push this folder to GitHub.
+2. Import `Joeljozzz/quantum_concepts` in Vercel.
+3. Confirm settings:
+   - Framework Preset: `Next.js`
+   - Install Command: `npm install`
+   - Build Command: `npm run build`
+4. Click Deploy.
+
+### Option B: Vercel CLI deployment
 
 ```powershell
 npm install -g vercel
 vercel
+vercel --prod
 ```
 
 ## Notes
