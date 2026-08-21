@@ -15,84 +15,107 @@ type QuizQuestion = {
   explanation: string;
 };
 
+type RuntimeOption = {
+  label: string;
+  detail: string;
+};
+
 const lessonSteps: LessonStep[] = [
   {
-    title: "1) Bit vs Qubit",
+    title: "1) The Misleading Pop-Sci Summary",
     message:
-      "A classical bit is either 0 or 1. A qubit can be in a weighted combination of both until you measure it.",
-    visualHint: "Imagine two bars (|0> and |1>) that can both be non-zero at once."
+      "The claim 'quantum tries all inputs in parallel and instantly reveals the answer' leads to wrong intuition for search problems.",
+    visualHint: "Show a fake shortcut arrow to O(1), then cross it out."
   },
   {
-    title: "2) Superposition",
+    title: "2) The Opening Quiz (Needle in a Haystack)",
     message:
-      "A Hadamard-like operation spreads amplitude across many states, which lets one operation influence many possibilities.",
+      "Given a black-box verifier f(x) that is true for exactly one secret key in 0..N-1, classical search needs O(N) checks on average.",
     visualHint:
-      "Start from one tall bar at |00...0>; then flatten to equal bars across all states."
+      "One highlighted key in a long row; average classical attempts around N/2."
   },
   {
-    title: "3) Phase Marking",
+    title: "3) Correct Quantum Runtime",
     message:
-      "In Grover's search, the target state's phase is flipped. You do not directly increase probability yet; you mark it for interference.",
-    visualHint: "Target bar keeps size but changes sign (phase), setting up the next step."
+      "The right asymptotic runtime is O(sqrt(N)), not O(1), O(log N), or O(log log N). This was proven optimal, and Grover achieves it.",
+    visualHint: "Bar chart of runtimes with O(sqrt(N)) highlighted as the winner."
   },
   {
-    title: "4) Diffusion (Inversion About Mean)",
+    title: "4) State Vector + Born Rule",
     message:
-      "The diffusion operation reflects amplitudes around the average, making the marked state grow while others shrink.",
-    visualHint: "Think of bars mirrored around a center line; target becomes taller."
+      "A k-qubit program evolves a unit state vector with 2^k components. Squared magnitudes give measurement probabilities.",
+    visualHint: "Components can be positive or negative; signs matter for interference."
   },
   {
-    title: "5) Repeat Near Optimal Count",
+    title: "5) Grover Geometry",
     message:
-      "Repeat oracle + diffusion around pi/4 * sqrt(N) times for one marked item. Too many rounds overshoot.",
-    visualHint: "Probability rises like a wave, peaks, then falls if you keep going."
+      "Oracle flips the marked amplitude sign, diffusion reflects around the equal-superposition direction. Two reflections make a rotation by 2theta.",
+    visualHint: "State vector rotates toward the key; overshoot if you rotate too far."
+  },
+  {
+    title: "6) Why the pi/4 Constant Appears",
+    message:
+      "With sin(theta) = 1/sqrt(N), each Grover round rotates by about 2/sqrt(N). Reaching near pi/2 radians takes about pi/4 * sqrt(N) rounds.",
+    visualHint: "Quarter-turn target angle divided by per-round angle."
   }
 ];
 
 const quizQuestions: QuizQuestion[] = [
   {
-    prompt: "In Grover's algorithm, what does the oracle primarily do?",
+    prompt: "Why is O(1) wrong for this black-box search task?",
     choices: [
-      "Measures all qubits",
-      "Flips the phase of the marked state",
-      "Sorts the basis states",
-      "Copies the marked state"
+      "Because qubits cannot store binary",
+      "Because one measurement gives one sampled output, not all candidates",
+      "Because quantum gates are slower than classical gates",
+      "Because only NP-complete problems are allowed"
     ],
     answerIndex: 1,
     explanation:
-      "The oracle marks the desired state by phase inversion so interference can amplify it in later steps."
+      "The state may encode amplitudes over many candidates, but readout returns a single random bit string."
   },
   {
-    prompt: "Why is diffusion useful after the phase flip?",
+    prompt: "In the state-vector model, measurement probabilities are obtained by:",
     choices: [
-      "It randomizes amplitudes",
-      "It deletes unmarked states",
-      "It reflects amplitudes around the mean to amplify the target",
-      "It converts qubits into bits"
+      "Taking each component magnitude and squaring it",
+      "Adding all components directly",
+      "Taking only positive entries",
+      "Sorting amplitudes by absolute value"
+    ],
+    answerIndex: 0,
+    explanation:
+      "This is the Born-rule mapping used in the lesson: probability for each output is |amplitude|^2."
+  },
+  {
+    prompt: "What is the geometric effect of 'oracle reflection + diffusion reflection'?",
+    choices: [
+      "A random walk over all basis states",
+      "A projection onto measured output",
+      "A rotation in a 2D plane by 2theta",
+      "An irreversible collapse to the key"
     ],
     answerIndex: 2,
     explanation:
-      "Diffusion is the amplitude-amplification step that increases target probability."
+      "Two reflections compose into a rotation. In Grover, this rotation increment is 2theta in the 2D search plane."
   },
   {
-    prompt: "For one marked item, the rough optimal number of Grover rounds is:",
-    choices: ["log2(N)", "N/2", "pi/4 * sqrt(N)", "N"],
-    answerIndex: 2,
-    explanation:
-      "The amplitude rotation angle leads to an optimal iteration count around pi/4 * sqrt(N)."
-  },
-  {
-    prompt: "What can happen if you keep applying Grover rounds past the optimum?",
+    prompt: "For one marked item, the near-optimal Grover iteration count is:",
     choices: [
-      "Probability stays at 100%",
-      "The system freezes",
-      "You overshoot and target probability drops",
-      "The oracle no longer works"
+      "O(log N)",
+      "pi/4 * sqrt(N)",
+      "N/2",
+      "O(1)"
     ],
-    answerIndex: 2,
+    answerIndex: 1,
     explanation:
-      "Amplitude rotates continuously, so extra rounds move away from the peak."
+      "This is the famous constant hidden by big-O: about pi/4 times sqrt(N)."
   }
+];
+
+const runtimeOptions: RuntimeOption[] = [
+  { label: "O(sqrt(N))", detail: "Quadratic speedup (correct for Grover search)." },
+  { label: "O(log N)", detail: "Would be exponential speedup over linear search." },
+  { label: "O(log log N)", detail: "Even stronger, but not achievable here." },
+  { label: "O(1)", detail: "Constant time regardless of search-space size." }
 ];
 
 function clamped(value: number, min: number, max: number): number {
@@ -112,6 +135,7 @@ export default function HomePage() {
   const [quizCursor, setQuizCursor] = useState(0);
   const [score, setScore] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
+  const [runtimePick, setRuntimePick] = useState<number | null>(null);
 
   const stateCount = 2 ** qubits;
   const safeMarked = clamped(marked, 0, stateCount - 1);
@@ -179,6 +203,31 @@ export default function HomePage() {
           Prepared for <span className="mt-company-name">Mettler Toledo</span>
           <span className="mt-trademark-symbol">TM</span> educational presentations.
         </p>
+      </section>
+
+      <section>
+        <h2>Opening Intuition Quiz</h2>
+        <p>
+          Suppose a verifier function returns true for exactly one secret key in a range of size N.
+          In a quantum setting, what is the best asymptotic runtime to find that key?
+        </p>
+        <div className="grid cols-2">
+          {runtimeOptions.map((option, idx) => (
+            <button key={option.label} onClick={() => setRuntimePick(idx)}>
+              {option.label}
+            </button>
+          ))}
+        </div>
+        {runtimePick !== null ? (
+          <div className="notice">
+            <p className="small">You picked: {runtimeOptions[runtimePick].label}</p>
+            <p className="small">{runtimeOptions[runtimePick].detail}</p>
+            <p className="small">
+              Correct answer: <strong>O(sqrt(N))</strong>. The algorithm uses amplitude amplification,
+              not instant extraction of the key from "all states at once".
+            </p>
+          </div>
+        ) : null}
       </section>
 
       <section>
@@ -343,8 +392,9 @@ export default function HomePage() {
       <section>
         <h2>Notes for Presentation</h2>
         <p>
-          The explanations here are original paraphrases of standard quantum concepts and are
-          designed for interactive teaching in a Vercel-ready web UI.
+          This sequence now follows the video's core arc: misconception check, black-box search
+          quiz, state-vector model, and the geometric rotation view behind Grover's pi/4 * sqrt(N)
+          runtime.
         </p>
       </section>
     </main>
