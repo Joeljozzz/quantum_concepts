@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type LessonStep = {
   title: string;
@@ -18,6 +18,15 @@ type QuizQuestion = {
 type RuntimeOption = {
   label: string;
   detail: string;
+};
+
+type StoryBeat = {
+  title: string;
+  narration: string;
+  prompt: string;
+  options: string[];
+  answerIndex: number;
+  reveal: string;
 };
 
 const lessonSteps: LessonStep[] = [
@@ -118,6 +127,65 @@ const runtimeOptions: RuntimeOption[] = [
   { label: "O(1)", detail: "Constant time regardless of search-space size." }
 ];
 
+const storyBeats: StoryBeat[] = [
+  {
+    title: "Scene 1: The Misconception",
+    narration:
+      "You hear: quantum checks every input in parallel, so search should be instant. The mission is to challenge that intuition.",
+    prompt: "If measurement gives one sampled output, what does that imply?",
+    options: [
+      "You still need amplitude concentrated on the right state",
+      "You can always read all states at once",
+      "Runtime must be O(1)"
+    ],
+    answerIndex: 0,
+    reveal:
+      "Correct. Superposition alone is not enough. The algorithm must shape amplitudes so the right state is likely when sampled."
+  },
+  {
+    title: "Scene 2: Oracle Marking",
+    narration:
+      "The verifier becomes an oracle that flips only the marked state's sign, leaving all others unchanged.",
+    prompt: "What changes immediately after the sign flip?",
+    options: [
+      "The probabilities instantly become 100% on the key",
+      "Only phase/sign changes; probability is not yet amplified",
+      "All states collapse to the key"
+    ],
+    answerIndex: 1,
+    reveal:
+      "Right. The sign flip is a phase mark. Diffusion is the step that turns that phase information into higher key probability."
+  },
+  {
+    title: "Scene 3: Two Reflections",
+    narration:
+      "Reflection about the marked-sign axis and reflection about the balance axis combine into a geometric rotation.",
+    prompt: "Each Grover round behaves like:",
+    options: [
+      "A random jump",
+      "A 2theta rotation in the search plane",
+      "A full collapse"
+    ],
+    answerIndex: 1,
+    reveal:
+      "Exactly. Two reflections compose into a rotation, which steadily steers the state vector toward the key direction."
+  },
+  {
+    title: "Scene 4: The Decision",
+    narration:
+      "The state approaches the key direction near the peak. If you keep iterating, you overshoot and probability falls again.",
+    prompt: "Best stopping intuition for one marked item?",
+    options: [
+      "Stop near pi/4 * sqrt(N)",
+      "Stop at log2(N)",
+      "Never stop; more rounds is always better"
+    ],
+    answerIndex: 0,
+    reveal:
+      "Yes. The peak arrives near pi/4 * sqrt(N), matching the runtime result highlighted in the video."
+  }
+];
+
 function clamped(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
@@ -136,6 +204,11 @@ export default function HomePage() {
   const [score, setScore] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [runtimePick, setRuntimePick] = useState<number | null>(null);
+  const [autoPlay, setAutoPlay] = useState(false);
+
+  const [storyIndex, setStoryIndex] = useState(0);
+  const [storyPick, setStoryPick] = useState<number | null>(null);
+  const [storyScore, setStoryScore] = useState(0);
 
   const stateCount = 2 ** qubits;
   const safeMarked = clamped(marked, 0, stateCount - 1);
@@ -166,6 +239,23 @@ export default function HomePage() {
   }, [iterations, safeMarked, stateCount]);
 
   const activeQuestion = quizQuestions[quizCursor];
+  const activeStory = storyBeats[storyIndex];
+
+  const thetaDegrees = (groverData.theta * 180) / Math.PI;
+  const progress = clamped(iterations / Math.max(groverData.optimal, 1), 0, 1.5);
+  const rotationDegrees = clamped(progress * 90, 0, 135);
+
+  useEffect(() => {
+    if (!autoPlay) {
+      return;
+    }
+    const loopLimit = Math.max(groverData.optimal + 3, 5);
+    const timer = setInterval(() => {
+      setIterations((prev) => (prev >= loopLimit ? 0 : prev + 1));
+    }, 700);
+
+    return () => clearInterval(timer);
+  }, [autoPlay, groverData.optimal]);
 
   const handleChoose = (choiceIdx: number): void => {
     if (picked !== null) {
@@ -189,6 +279,30 @@ export default function HomePage() {
     setQuizCursor(0);
     setPicked(null);
     setScore(0);
+  };
+
+  const handleStoryChoose = (choiceIdx: number): void => {
+    if (storyPick !== null) {
+      return;
+    }
+    setStoryPick(choiceIdx);
+    if (choiceIdx === activeStory.answerIndex) {
+      setStoryScore((prev) => prev + 1);
+    }
+  };
+
+  const handleNextStory = (): void => {
+    if (storyIndex === storyBeats.length - 1) {
+      return;
+    }
+    setStoryIndex((prev) => prev + 1);
+    setStoryPick(null);
+  };
+
+  const handleStoryRestart = (): void => {
+    setStoryIndex(0);
+    setStoryPick(null);
+    setStoryScore(0);
   };
 
   return (
@@ -228,6 +342,113 @@ export default function HomePage() {
             </p>
           </div>
         ) : null}
+      </section>
+
+      <section>
+        <h2>Video-Style Animation Demo</h2>
+        <p>
+          This animated panel mimics the video&apos;s geometric story: repeated Grover rounds rotate
+          the state toward the key direction, then overshoot if you continue.
+        </p>
+        <div className="grid cols-2">
+          <div className="card">
+            <div className="orbit-plot" role="img" aria-label="Grover state rotation animation">
+              <svg viewBox="0 0 260 220" className="orbit-svg">
+                <line x1="30" y1="170" x2="230" y2="170" className="axis-line" />
+                <line x1="130" y1="200" x2="130" y2="30" className="axis-line" />
+                <path d="M 30 170 A 100 100 0 0 1 130 70" className="arc-line" />
+                <g transform={`rotate(${-rotationDegrees} 130 170)`}>
+                  <line x1="130" y1="170" x2="210" y2="170" className="state-line" />
+                  <circle cx="210" cy="170" r="5" className="state-tip" />
+                </g>
+              </svg>
+            </div>
+            <p className="small">
+              Rotation progress: {rotationDegrees.toFixed(1)} degrees, theta approx {thetaDegrees.toFixed(2)} degrees.
+            </p>
+          </div>
+          <div className="card">
+            <h3>Playback Controls</h3>
+            <div className="toolbar">
+              <button onClick={() => setAutoPlay((prev) => !prev)}>
+                {autoPlay ? "Pause Animation" : "Play Animation"}
+              </button>
+              <button
+                onClick={() => {
+                  setAutoPlay(false);
+                  setIterations((prev) => prev + 1);
+                }}
+              >
+                Step 1 Round
+              </button>
+              <button
+                onClick={() => {
+                  setAutoPlay(false);
+                  setIterations(0);
+                }}
+              >
+                Reset Animation
+              </button>
+            </div>
+            <p className="small">
+              Use play for continuous motion or step mode for slide-by-slide storytelling.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Story Mode Quiz</h2>
+        <p>
+          Walk through four short scenes inspired by the lesson. Each scene asks one checkpoint
+          question before you unlock the next scene.
+        </p>
+        <div className="card">
+          <h3>
+            {activeStory.title} ({storyIndex + 1}/{storyBeats.length})
+          </h3>
+          <p>{activeStory.narration}</p>
+          <p>{activeStory.prompt}</p>
+
+          {activeStory.options.map((choice, idx) => {
+            const isPicked = storyPick === idx;
+            const isAnswer = idx === activeStory.answerIndex;
+            const className =
+              storyPick === null
+                ? "quiz-option"
+                : `quiz-option ${isAnswer ? "correct" : isPicked ? "wrong" : ""}`;
+
+            return (
+              <button
+                key={choice}
+                className={className}
+                onClick={() => handleStoryChoose(idx)}
+                disabled={storyPick !== null}
+              >
+                {choice}
+              </button>
+            );
+          })}
+
+          {storyPick !== null ? (
+            <div className="notice">
+              <p className="small">{activeStory.reveal}</p>
+            </div>
+          ) : null}
+
+          <div className="toolbar">
+            <span className="badge">
+              Story score: {storyScore} / {storyBeats.length}
+            </span>
+            <button
+              onClick={handleNextStory}
+              disabled={storyPick === null || storyIndex === storyBeats.length - 1}
+            >
+              Next Scene
+            </button>
+            <button onClick={handleStoryRestart}>Restart Story</button>
+          </div>
+        </div>
       </section>
 
       <section>
