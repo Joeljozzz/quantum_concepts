@@ -34,7 +34,7 @@ export default function GroverLab() {
   return (
     <section className="chapter">
       <Reveal as="div" className="chapter-heading" variant="up">
-        <span className="chapter-index">03</span>
+        <span className="chapter-index">06</span>
         <h2>Grover&apos;s Algorithm: Rotate Toward the Answer</h2>
         <p>
           Every round reflects the state twice: once to mark the answer&apos;s phase, once to

@@ -79,7 +79,7 @@ export default function QuantumAI() {
   return (
     <section className="chapter">
       <Reveal as="div" className="chapter-heading" variant="up">
-        <span className="chapter-index">04</span>
+        <span className="chapter-index">08</span>
         <h2>Where This Connects to AI</h2>
         <p>
           The same amplitude-rotation trick behind Grover&apos;s algorithm is the seed idea behind

@@ -863,7 +863,207 @@ input {
   }
 }
 
+/* =====================================================================
+   Qubit vector chapter
+   ===================================================================== */
+.qubit-svg {
+  width: 100%;
+  height: 260px;
+  display: block;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.qubit-circle {
+  fill: none;
+  stroke: rgba(120, 190, 255, 0.25);
+  stroke-width: 1.4;
+}
+
+.qubit-axis-label {
+  fill: var(--color-text-muted);
+  font-size: 14px;
+  font-family: var(--font-family-base);
+}
+
+.qubit-vector-line {
+  stroke: var(--mt-cyan);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.qubit-vector-tip {
+  fill: var(--mt-green);
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.qubit-state-label {
+  fill: var(--mt-white);
+  font-family: var(--font-family-bold);
+  font-size: 15px;
+}
+
+.qubit-prob-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin: var(--space-2) 0;
+}
+
+/* =====================================================================
+   Oracle lab
+   ===================================================================== */
+.oracle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+}
+
+.oracle-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-2);
+}
+
+.oracle-cell.oracle-true {
+  border-color: var(--mt-green);
+  background: linear-gradient(120deg, rgba(106, 176, 35, 0.4), rgba(106, 176, 35, 0.15));
+}
+
+.oracle-cell.oracle-false {
+  opacity: 0.6;
+}
+
+.sign-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+}
+
+.sign-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  transition: all 0.3s ease;
+}
+
+.sign-cell.sign-negative {
+  border-color: #ff7a63;
+  background: linear-gradient(120deg, rgba(255, 122, 99, 0.35), rgba(255, 122, 99, 0.1));
+}
+
+.sign-symbol {
+  font-family: var(--font-family-bold);
+  font-size: var(--font-size-lg);
+  color: var(--mt-white);
+}
+
+/* =====================================================================
+   Circuit view
+   ===================================================================== */
+.circuit-scroll {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.circuit-svg {
+  min-width: 560px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.circuit-wire {
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1.4;
+}
+
+.circuit-gate {
+  stroke: var(--color-border-strong);
+  stroke-width: 1.4;
+}
+
+.hadamard-gate {
+  fill: rgba(0, 156, 221, 0.35);
+}
+
+.oracle-gate {
+  fill: rgba(255, 122, 99, 0.25);
+}
+
+.diffuser-gate {
+  fill: rgba(106, 176, 35, 0.3);
+}
+
+.measure-gate {
+  fill: rgba(255, 255, 255, 0.15);
+}
+
+.circuit-gate-label {
+  fill: var(--mt-white);
+  font-size: 13px;
+  font-family: var(--font-family-bold);
+  text-anchor: middle;
+}
+
+/* =====================================================================
+   Comprehensive mobile-responsive pass
+   ===================================================================== */
+@media (max-width: 960px) {
+  .chapters-shell {
+    gap: var(--space-6);
+    padding: var(--space-6) var(--space-3) var(--space-6);
+  }
+
+  .grid.cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
+  .hero-shell {
+    min-height: 100vh;
+    padding: var(--space-5) var(--space-3);
+  }
+
+  .hero-title {
+    font-size: clamp(1.7rem, 8vw, 2.4rem);
+  }
+
+  .hero-sub {
+    font-size: var(--font-size-base);
+  }
+
+  .hero-cta-row {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .orbit-ring.r1,
+  .orbit-ring.r2 {
+    display: none;
+  }
+
+  .chapter-heading h2 {
+    font-size: 1.4rem;
+  }
+
+  .glass-card {
+    padding: var(--space-3);
+  }
+
   .compare-shell {
     grid-template-columns: 1fr;
   }
@@ -874,6 +1074,86 @@ input {
 
   .layer-row {
     grid-template-columns: 80px 1fr;
+  }
+
+  .layer-bits {
+    grid-column: 2 / span 1;
+    font-size: 13px;
+  }
+
+  .hardware-line {
+    grid-column: 2 / span 1;
+    flex-wrap: wrap;
+  }
+
+  .toolbar {
+    gap: var(--space-2);
+  }
+
+  .toolbar button,
+  .toolbar label {
+    width: 100%;
+  }
+
+  .toolbar select,
+  .toolbar input[type="number"] {
+    width: 100%;
+  }
+
+  .runtime-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .bar-chart {
+    grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
+    min-height: 160px;
+  }
+
+  .concept-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .oracle-grid {
+    grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
+  }
+
+  .sign-row {
+    grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+  }
+
+  .qubit-svg {
+    height: 220px;
+  }
+
+  .curve-svg,
+  .orbit-svg {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-eyebrow {
+    font-size: 11px;
+    padding: 5px 12px;
+  }
+
+  .chapter-index {
+    font-size: 12px;
+  }
+
+  .badge {
+    font-size: 12px;
+    padding: 3px 9px;
+  }
+
+  .layer-row {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .layer-title {
+    grid-column: 1;
   }
 }
 

@@ -20,7 +20,7 @@ export default function RuntimeExplorer() {
   return (
     <section className="chapter">
       <Reveal as="div" className="chapter-heading" variant="up">
-        <span className="chapter-index">02</span>
+        <span className="chapter-index">05</span>
         <h2>How Fast Is the Speedup, Really?</h2>
         <p>
           Pop-science says quantum search is instant. It is not. The real, provable result is a

@@ -26,6 +26,10 @@ const source = readAllSource(appDir);
 const requiredStrings = [
   "Grover",
   "Classical CPU vs Quantum Processor",
+  "The Qubit Is a Rotating Arrow",
+  "The Function That Actually Answers",
+  "Under the Hood: The Actual Circuit",
+  "Measurement Collapses the State",
   "Test Your Understanding",
   "Step 1 Round",
   "Where This Connects to AI",
@@ -50,6 +54,6 @@ if (promptCount < 4) {
 }
 
 console.log(
-  "Smoke check passed: hero, classical-vs-quantum lab, runtime explorer, Grover lab, quantum+AI chapter, and story quiz all detected."
+  "Smoke check passed: hero, compare lab, qubit vector, oracle lab, circuit view, runtime explorer, Grover lab, measurement lab, quantum+AI chapter, and story quiz all detected."
 );
 

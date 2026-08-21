@@ -62,7 +62,7 @@ export default function StoryQuiz() {
   return (
     <section className="chapter">
       <Reveal as="div" className="chapter-heading" variant="up">
-        <span className="chapter-index">05</span>
+        <span className="chapter-index">09</span>
         <h2>Test Your Understanding</h2>
         <p>Four short scenes, four checkpoint questions. Unlock the next scene by answering.</p>
       </Reveal>
