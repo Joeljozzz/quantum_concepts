@@ -318,6 +318,149 @@ input {
   background: var(--mt-cyan-10);
 }
 
+.showcase-stage {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.showcase-viewport {
+  background: #020202;
+}
+
+.showcase-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.showcase-caption {
+  padding: var(--space-3);
+}
+
+.showcase-caption p {
+  margin: var(--space-2) 0 0;
+}
+
+.showcase-line {
+  stroke: #5d5d5d;
+  stroke-width: 1.2;
+}
+
+.showcase-axis {
+  stroke: #b8b8b8;
+  stroke-width: 1.6;
+  fill: none;
+}
+
+.showcase-outline {
+  stroke: #a8a8a8;
+  stroke-width: 1.5;
+  fill: transparent;
+}
+
+.showcase-band-a {
+  fill: #1f6f82;
+}
+
+.showcase-band-b {
+  fill: #115d78;
+}
+
+.showcase-band-c {
+  fill: #0b465c;
+}
+
+.showcase-chip {
+  fill: #f1db3f;
+  font-size: 40px;
+  font-family: var(--font-family-bold);
+}
+
+.showcase-title {
+  fill: #e4e4e4;
+  font-size: 22px;
+  font-family: var(--font-family-bold);
+}
+
+.showcase-label {
+  fill: #e1e1e1;
+  font-size: 19px;
+  font-family: var(--font-family-base);
+}
+
+.showcase-main {
+  fill: #f4f4f4;
+  font-size: 27px;
+  font-family: var(--font-family-bold);
+}
+
+.showcase-footer {
+  fill: #8fdfff;
+  font-size: 20px;
+  font-family: var(--font-family-base);
+}
+
+.curve-red {
+  stroke: #ff7a63;
+  stroke-width: 3;
+  fill: none;
+}
+
+.curve-red-soft {
+  stroke: #ff8f73;
+  stroke-width: 3;
+  fill: none;
+}
+
+.curve-cyan {
+  stroke: #72d5ff;
+  stroke-width: 3;
+  fill: none;
+}
+
+.curve-yellow {
+  stroke: #fff04a;
+  stroke-width: 3;
+  fill: none;
+}
+
+.curve-orange {
+  stroke: #ffa026;
+  stroke-width: 3;
+  fill: none;
+}
+
+.curve-red-text,
+.curve-cyan-text,
+.curve-yellow-text,
+.curve-orange-text,
+.curve-red-soft-text {
+  font-size: 16px;
+  font-family: var(--font-family-base);
+}
+
+.curve-red-text {
+  fill: #ff7a63;
+}
+
+.curve-cyan-text {
+  fill: #72d5ff;
+}
+
+.curve-yellow-text {
+  fill: #fff04a;
+}
+
+.curve-orange-text {
+  fill: #ffa026;
+}
+
+.curve-red-soft-text {
+  fill: #ff8f73;
+}
+
 .orbit-plot {
   width: 100%;
   border: 1px solid var(--color-border);

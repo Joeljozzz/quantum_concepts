@@ -29,6 +29,11 @@ type StoryBeat = {
   reveal: string;
 };
 
+type ShowcaseFrame = {
+  title: string;
+  subtitle: string;
+};
+
 const lessonSteps: LessonStep[] = [
   {
     title: "1) The Misleading Pop-Sci Summary",
@@ -186,12 +191,185 @@ const storyBeats: StoryBeat[] = [
   }
 ];
 
+const showcaseFrames: ShowcaseFrame[] = [
+  {
+    title: "Layers of Abstraction (Side-by-Side)",
+    subtitle: "Classical CPU and quantum processor both expose data layers, but with different state models."
+  },
+  {
+    title: "Classical Stack",
+    subtitle: "Classical data types map to deterministic bit patterns and transistor hardware."
+  },
+  {
+    title: "Runtime Milestones",
+    subtitle: "BBBV lower bound and Grover's matching O(sqrt(N)) algorithm in the 1990s."
+  },
+  {
+    title: "Quiz Curves",
+    subtitle: "Compare O(N), O(sqrt(N)), O(log N), O(log log N), and O(1) growth intuition."
+  },
+  {
+    title: "k-Qubit State Vector",
+    subtitle: "A k-qubit system corresponds to 2^k basis outcomes in the computational basis."
+  },
+  {
+    title: "Classical AI Pipeline (Reference)",
+    subtitle: "A familiar classical stack: attention + MLP blocks composed in sequence."
+  },
+  {
+    title: "Predictive Embedding Pipeline (Reference)",
+    subtitle: "Encoder-predictor-encoder structure shown as a comparison-style systems diagram."
+  }
+];
+
 function clamped(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
 function formatState(index: number, qubits: number): string {
   return `|${index.toString(2).padStart(qubits, "0")}>`;
+}
+
+function ShowcaseVisual({ frameIndex }: { frameIndex: number }) {
+  if (frameIndex === 0) {
+    return (
+      <svg viewBox="0 0 900 360" className="showcase-svg" aria-label="Classical and quantum abstraction layers">
+        <rect x="0" y="0" width="900" height="360" fill="#020202" />
+        <line x1="450" y1="0" x2="450" y2="360" className="showcase-line" />
+        <text x="210" y="45" className="showcase-chip">C</text>
+        <text x="660" y="45" className="showcase-chip">|Q&gt;</text>
+        <rect x="0" y="85" width="900" height="75" className="showcase-band-a" />
+        <rect x="0" y="160" width="900" height="75" className="showcase-band-b" />
+        <rect x="0" y="235" width="900" height="75" className="showcase-band-c" />
+        <text x="30" y="126" className="showcase-label">Data types</text>
+        <text x="30" y="201" className="showcase-label">Bits</text>
+        <text x="30" y="276" className="showcase-label">Hardware</text>
+        <text x="225" y="126" className="showcase-main">67</text>
+        <text x="285" y="126" className="showcase-main">'C'</text>
+        <text x="635" y="126" className="showcase-main">|81&gt;</text>
+        <text x="160" y="201" className="showcase-main">01000011</text>
+        <text x="585" y="201" className="showcase-main">|01010001&gt;</text>
+        <text x="205" y="336" className="showcase-footer">Classical CPU</text>
+        <text x="585" y="336" className="showcase-footer">Quantum Processor</text>
+      </svg>
+    );
+  }
+
+  if (frameIndex === 1) {
+    return (
+      <svg viewBox="0 0 900 360" className="showcase-svg" aria-label="Classical-only abstraction panel">
+        <rect x="0" y="0" width="900" height="360" fill="#020202" />
+        <text x="450" y="50" textAnchor="middle" className="showcase-chip">C</text>
+        <rect x="170" y="80" width="530" height="230" className="showcase-band-a" />
+        <rect x="170" y="155" width="530" height="75" className="showcase-band-b" />
+        <rect x="170" y="230" width="530" height="80" className="showcase-band-c" />
+        <text x="65" y="124" className="showcase-label">Data types</text>
+        <text x="95" y="199" className="showcase-label">Bits</text>
+        <text x="75" y="275" className="showcase-label">Hardware</text>
+        <text x="375" y="124" className="showcase-main">67</text>
+        <text x="470" y="124" className="showcase-main">'C'</text>
+        <text x="300" y="199" className="showcase-main">01000011</text>
+        <text x="715" y="195" className="showcase-title">Layers</text>
+        <text x="715" y="226" className="showcase-title">of</text>
+        <text x="715" y="258" className="showcase-title">Abstraction</text>
+      </svg>
+    );
+  }
+
+  if (frameIndex === 2) {
+    return (
+      <svg viewBox="0 0 900 360" className="showcase-svg" aria-label="Grover and BBBV runtime timeline">
+        <rect x="0" y="0" width="900" height="360" fill="#020202" />
+        <line x1="30" y1="300" x2="870" y2="300" className="showcase-axis" />
+        <path d="M 45 35 C 20 120, 70 250, 120 300" className="curve-red" />
+        <path d="M 75 95 C 90 160, 120 240, 170 300" className="curve-cyan" />
+        <text x="28" y="34" className="curve-red-text">BBBV theorem (1994): Search &gt;= O(sqrt(N))</text>
+        <text x="80" y="130" className="curve-cyan-text">Grover (1996): Search = O(sqrt(N))</text>
+        <text x="675" y="45" className="showcase-main">N = 1,000,000</text>
+        <text x="28" y="328" className="showcase-label">1990</text>
+        <text x="132" y="328" className="showcase-label">1995</text>
+        <text x="245" y="328" className="showcase-label">2000</text>
+        <text x="770" y="328" className="showcase-label">2025</text>
+      </svg>
+    );
+  }
+
+  if (frameIndex === 3) {
+    return (
+      <svg viewBox="0 0 900 360" className="showcase-svg" aria-label="Runtime quiz curves">
+        <rect x="0" y="0" width="900" height="360" fill="#020202" />
+        <text x="42" y="65" className="showcase-main">A) O(sqrt(N))</text>
+        <text x="42" y="115" className="showcase-main">B) O(log(N))</text>
+        <text x="42" y="165" className="showcase-main">C) O(log(log(N)))</text>
+        <text x="42" y="215" className="showcase-main">D) O(1)</text>
+        <line x1="390" y1="35" x2="390" y2="305" className="showcase-axis" />
+        <line x1="390" y1="305" x2="860" y2="305" className="showcase-axis" />
+        <path d="M 395 300 L 760 55" className="curve-yellow" />
+        <path d="M 395 300 C 460 250, 575 230, 760 195" className="curve-orange" />
+        <path d="M 395 300 C 470 268, 600 260, 760 240" className="curve-red" />
+        <path d="M 395 300 C 490 286, 625 282, 760 276" className="curve-red-soft" />
+        <text x="765" y="60" className="curve-yellow-text">O(N)</text>
+        <text x="765" y="198" className="curve-orange-text">O(sqrt(N))</text>
+        <text x="765" y="243" className="curve-red-text">O(log(N))</text>
+        <text x="765" y="280" className="curve-red-soft-text">O(log(log(N)))</text>
+      </svg>
+    );
+  }
+
+  if (frameIndex === 4) {
+    return (
+      <svg viewBox="0 0 900 360" className="showcase-svg" aria-label="k-qubit to 2^k state components">
+        <rect x="0" y="0" width="900" height="360" fill="#020202" />
+        <text x="130" y="70" className="showcase-main">k-qubit quantum computer</text>
+        <line x1="120" y1="78" x2="560" y2="78" className="showcase-line" />
+        <text x="300" y="180" className="showcase-chip">|Q&gt;</text>
+        <path d="M 470 180 L 610 180" className="showcase-axis" />
+        <path d="M 610 180 L 590 166" className="showcase-axis" />
+        <path d="M 610 180 L 590 194" className="showcase-axis" />
+        <rect x="710" y="45" width="9" height="260" fill="#d9d9d9" />
+        <rect x="724" y="45" width="9" height="260" fill="#9fe7ff" opacity="0.6" />
+        <text x="750" y="182" className="showcase-main">2^k</text>
+      </svg>
+    );
+  }
+
+  if (frameIndex === 5) {
+    return (
+      <svg viewBox="0 0 900 360" className="showcase-svg" aria-label="Classical AI transformer-like block diagram">
+        <rect x="0" y="0" width="900" height="360" fill="#020202" />
+        <rect x="55" y="45" width="790" height="270" rx="8" className="showcase-outline" />
+        <rect x="78" y="68" width="200" height="225" rx="6" className="showcase-outline" />
+        <rect x="305" y="68" width="170" height="225" rx="6" className="showcase-outline" />
+        <rect x="505" y="68" width="200" height="225" rx="6" className="showcase-outline" />
+        <rect x="728" y="68" width="95" height="225" rx="6" className="showcase-outline" />
+        <text x="118" y="285" className="showcase-label">ATTENTION</text>
+        <text x="333" y="275" className="showcase-label">MULTILAYER</text>
+        <text x="335" y="297" className="showcase-label">PERCEPTRON</text>
+        <text x="545" y="285" className="showcase-label">ATTENTION</text>
+        <text x="732" y="275" className="showcase-label">MLP</text>
+        <text x="405" y="330" className="showcase-label">CLASSICAL PIPELINE</text>
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 900 360" className="showcase-svg" aria-label="Predictive embedding block diagram">
+      <rect x="0" y="0" width="900" height="360" fill="#020202" />
+      <text x="120" y="52" className="showcase-main">Predictive embedding architecture</text>
+      <rect x="190" y="190" width="120" height="80" rx="8" className="showcase-outline" />
+      <text x="220" y="237" className="showcase-label">ENCODER</text>
+      <rect x="390" y="115" width="130" height="80" rx="8" className="showcase-outline" />
+      <text x="420" y="160" className="showcase-label">PREDICTOR</text>
+      <rect x="620" y="190" width="120" height="80" rx="8" className="showcase-outline" />
+      <text x="650" y="237" className="showcase-label">ENCODER</text>
+      <path d="M 320 225 L 380 155" className="showcase-axis" />
+      <path d="M 530 155 L 610 225" className="showcase-axis" />
+      <text x="120" y="150" className="curve-cyan-text">[0.1, -0.1, ..., 0.2]</text>
+      <text x="560" y="150" className="curve-yellow-text">[0.1, -0.2, ..., 0.2]</text>
+      <text x="230" y="300" className="showcase-main">x</text>
+      <text x="677" y="300" className="showcase-main">y</text>
+    </svg>
+  );
 }
 
 export default function HomePage() {
@@ -209,6 +387,8 @@ export default function HomePage() {
   const [storyIndex, setStoryIndex] = useState(0);
   const [storyPick, setStoryPick] = useState<number | null>(null);
   const [storyScore, setStoryScore] = useState(0);
+  const [showcaseIndex, setShowcaseIndex] = useState(0);
+  const [showcaseAutoPlay, setShowcaseAutoPlay] = useState(true);
 
   const stateCount = 2 ** qubits;
   const safeMarked = clamped(marked, 0, stateCount - 1);
@@ -256,6 +436,17 @@ export default function HomePage() {
 
     return () => clearInterval(timer);
   }, [autoPlay, groverData.optimal]);
+
+  useEffect(() => {
+    if (!showcaseAutoPlay) {
+      return;
+    }
+    const timer = setInterval(() => {
+      setShowcaseIndex((prev) => (prev + 1) % showcaseFrames.length);
+    }, 2600);
+
+    return () => clearInterval(timer);
+  }, [showcaseAutoPlay]);
 
   const handleChoose = (choiceIdx: number): void => {
     if (picked !== null) {
@@ -342,6 +533,46 @@ export default function HomePage() {
             </p>
           </div>
         ) : null}
+      </section>
+
+      <section>
+        <h2>Classical CPU vs Quantum Processor Showcase</h2>
+        <p>
+          This storyboard follows your reference frames as a mini video sequence focused on the
+          contrast between classical and quantum computation.
+        </p>
+        <div className="showcase-stage">
+          <div className="showcase-viewport">
+            <ShowcaseVisual frameIndex={showcaseIndex} />
+          </div>
+          <div className="showcase-caption">
+            <h3>
+              Frame {showcaseIndex + 1}: {showcaseFrames[showcaseIndex].title}
+            </h3>
+            <p>{showcaseFrames[showcaseIndex].subtitle}</p>
+          </div>
+          <div className="toolbar">
+            <button
+              onClick={() => {
+                setShowcaseAutoPlay(false);
+                setShowcaseIndex((prev) => (prev === 0 ? showcaseFrames.length - 1 : prev - 1));
+              }}
+            >
+              Previous Frame
+            </button>
+            <button onClick={() => setShowcaseAutoPlay((prev) => !prev)}>
+              {showcaseAutoPlay ? "Pause Reel" : "Play Reel"}
+            </button>
+            <button
+              onClick={() => {
+                setShowcaseAutoPlay(false);
+                setShowcaseIndex((prev) => (prev + 1) % showcaseFrames.length);
+              }}
+            >
+              Next Frame
+            </button>
+          </div>
+        </div>
       </section>
 
       <section>
