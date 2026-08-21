@@ -9,6 +9,7 @@ type RevealProps = {
   className?: string;
   delay?: number;
   variant?: "up" | "left" | "right" | "scale";
+  id?: string;
 };
 
 export default function Reveal({
@@ -16,7 +17,8 @@ export default function Reveal({
   as = "div",
   className = "",
   delay = 0,
-  variant = "up"
+  variant = "up",
+  id
 }: RevealProps) {
   const { ref, visible } = useReveal<HTMLDivElement>();
   const Tag = as;
@@ -26,9 +28,9 @@ export default function Reveal({
       ref={ref as never}
       className={`reveal reveal-${variant} ${visible ? "is-visible" : ""} ${className}`.trim()}
       style={{ transitionDelay: `${delay}ms` }}
+      id={id}
     >
       {children}
     </Tag>
   );
 }
-

@@ -1,14 +1,14 @@
 import HeroSection from "./components/HeroSection";
 import ScrollProgress from "./components/ScrollProgress";
-import AbstractionCompare from "./components/AbstractionCompare";
-import QubitVector from "./components/QubitVector";
-import OracleLab from "./components/OracleLab";
-import CircuitView from "./components/CircuitView";
-import RuntimeExplorer from "./components/RuntimeExplorer";
-import GroverLab from "./components/GroverLab";
-import MeasurementLab from "./components/MeasurementLab";
-import QuantumAI from "./components/QuantumAI";
-import StoryQuiz from "./components/StoryQuiz";
+import WhyQuantum from "./components/WhyQuantum";
+import BitsVsQubits from "./components/BitsVsQubits";
+import QuantumSuperpowers from "./components/QuantumSuperpowers";
+import RealWorldProblems from "./components/RealWorldProblems";
+import QuantumComputers from "./components/QuantumComputers";
+import HowItWorks from "./components/HowItWorks";
+import QuantumPlusAI from "./components/QuantumPlusAI";
+import FutureInfrastructure from "./components/FutureInfrastructure";
+import Quiz from "./components/Quiz";
 import Reveal from "./components/Reveal";
 
 export default function HomePage() {
@@ -17,26 +17,26 @@ export default function HomePage() {
       <ScrollProgress />
       <HeroSection />
       <main className="chapters-shell">
-        <AbstractionCompare />
-        <QubitVector />
-        <OracleLab />
-        <CircuitView />
-        <RuntimeExplorer />
-        <GroverLab />
-        <MeasurementLab />
-        <QuantumAI />
-        <StoryQuiz />
+        <WhyQuantum />
+        <BitsVsQubits />
+        <QuantumSuperpowers />
+        <RealWorldProblems />
+        <QuantumComputers />
+        <HowItWorks />
+        <QuantumPlusAI />
+        <FutureInfrastructure />
+        <Quiz />
 
-        <Reveal as="section" variant="up" className="chapter footer-chapter">
-          <div className="card glass-card">
-            <h3>Notes for Presentation</h3>
-            <p className="small">
-              This experience follows a sequential arc: classical vs quantum abstraction, a single
-              qubit as a rotating vector, the verifier function behind every search problem, the
-              actual circuit the processor runs, the real runtime result behind Grover&apos;s
-              algorithm, the geometric rotation mechanism, what measurement collapse really means,
-              and where the same amplitude-rotation idea shows up in quantum-assisted AI
-              subroutines. Charts here are educational simulations, not hardware benchmarks.
+        <Reveal as="section" variant="up" className="chapter">
+          <div className="glass-card" style={{ textAlign: "center", padding: "48px 24px" }}>
+            <h3 style={{ marginBottom: 12 }}>Thank You</h3>
+            <p>
+              Quantum computing is not science fiction — it is happening now.
+              The organizations that prepare today will lead tomorrow.
+            </p>
+            <p className="small" style={{ marginTop: 16, opacity: 0.6 }}>
+              This interactive experience is for educational purposes.
+              Charts and comparisons are illustrative simulations, not hardware benchmarks.
             </p>
           </div>
         </Reveal>
@@ -44,4 +44,3 @@ export default function HomePage() {
     </>
   );
 }
-
