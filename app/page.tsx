@@ -28,14 +28,20 @@ export default function HomePage() {
         <Quiz />
 
         <Reveal as="section" variant="up" className="chapter">
-          <div className="glass-card" style={{ textAlign: "center", padding: "48px 24px" }}>
+          <div className="glass-card" style={{ textAlign: "center", padding: "48px 24px", marginBottom: "40px" }}>
             <h3 style={{ marginBottom: 12 }}>Thank You</h3>
             <p>
               Quantum computing is not science fiction — it is happening now.
               The organizations that prepare today will lead tomorrow.
             </p>
-            <p className="small" style={{ marginTop: 16, opacity: 0.6 }}>
-              This interactive experience is for educational purposes.
+            
+            <div style={{ marginTop: 32, paddingTop: 32, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+              <p style={{ fontWeight: 600, color: "var(--mt-white)", marginBottom: 4, fontSize: "1.1rem" }}>Joel Jose</p>
+              <p style={{ color: "var(--mt-cyan-60)", fontSize: "var(--fs-sm)", letterSpacing: "0.05em" }}>Data Scientist, Mettler Toledo</p>
+            </div>
+
+            <p className="small" style={{ marginTop: 32, opacity: 0.5 }}>
+              This interactive experience is for educational purposes.<br/>
               Charts and comparisons are illustrative simulations, not hardware benchmarks.
             </p>
           </div>
